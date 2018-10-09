@@ -1112,7 +1112,9 @@ func ActionResource(context middleware.Context, resourceSchema *schema.Schema,
 		return err
 	}
 
-	if _, ok := context["response"]; ok {
+	_, extensionReturnedResponse := context["response"]
+
+	if extensionReturnedResponse || action.HasResponseOwnership {
 		return nil
 	}
 

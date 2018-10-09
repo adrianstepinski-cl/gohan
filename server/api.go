@@ -408,7 +408,10 @@ func MapRouteBySchema(server *Server, dataStore db.DB, s *schema.Schema) {
 				handleError(w, err)
 				return
 			}
-			routes.ServeJson(w, context["response"])
+
+			if response, ok := context["response"]; ok {
+				routes.ServeJson(w, response)
+			}
 		}
 		route.AddRoute(action.Method, s.GetActionURL(action.Path), ActionFunc)
 		if s.ParentSchema != nil {
