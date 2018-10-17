@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+
+	"gopkg.in/DATA-DOG/go-sqlmock.v1"
 )
 
 func bin64(i uint64) string {
