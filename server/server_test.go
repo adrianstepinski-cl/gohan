@@ -50,6 +50,7 @@ var (
 
 const (
 	baseURL                   = "http://localhost:19090"
+	healthcheckURL            = baseURL + "/gohan/v0.1/healthcheck"
 	schemaURL                 = baseURL + "/gohan/v0.1/schemas"
 	versionURL                = baseURL + "/gohan/v0.1/version"
 	networkPluralURL          = baseURL + "/v2.0/networks"
@@ -1486,6 +1487,30 @@ var _ = Describe("Server package test", func() {
 
 		It("should require autorization token", func() {
 			testURL("GET", versionURL, "", nil, http.StatusUnauthorized)
+		})
+	})
+
+	Describe("Healthcheck test for active database", func() {
+		It("should return 200 if db works for members", func() {
+			testURL("GET", healthcheckURL, memberTokenID, nil, http.StatusOK)
+		})
+
+		It("should return 200 if db works for non-members", func() {
+			testURL("GET", healthcheckURL, "", nil, http.StatusOK)
+		})
+	})
+
+	PDescribe("Healthcheck test for inactive database", func() {
+		BeforeEach(func() {
+			server.StopDB()
+		})
+
+		It("should return 503 if db isn't working for members", func() {
+			testURL("GET", healthcheckURL, memberTokenID, nil, http.StatusServiceUnavailable)
+		})
+
+		It("should return 503 if db isn't working for non-members", func() {
+			testURL("GET", healthcheckURL, "", nil, http.StatusServiceUnavailable)
 		})
 	})
 })

@@ -634,3 +634,26 @@ func mapChildNamespaceRoute(route martini.Router, namespace *schema.Namespace) {
 		},
 	)
 }
+
+func mapHealthcheckRoute(route martini.Router, dataStore db.DB, manager *schema.Manager) {
+	healthcheckSchema, hasSchema := manager.Schema("healthcheck")
+	if !hasSchema {
+		panic("The 'healthcheck' schema is missing. Check if gohan.json is loaded")
+	}
+	url := healthcheckSchema.GetPluralURL()
+
+	log.Debug("Registering the healthcheck handler on %s", url)
+
+	get := func(w http.ResponseWriter, params martini.Params, auth schema.Authorization) {
+		defer resources.MeasureRequestTime(time.Now(), "get", healthcheckSchema.ID)
+
+		if _, err := dataStore.BeginTx(); err != nil {
+			http.Error(w, "", http.StatusServiceUnavailable)
+		} else {
+			http.Error(w, "", http.StatusOK)
+		}
+
+	}
+
+	route.Get(url, get)
+}

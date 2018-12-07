@@ -9,6 +9,15 @@
                 "path": ".*"
             },
             "scope": ["admin"]
+        },
+        {
+            "action": "healthcheck",
+            "effect": "allow",
+            "id": "healthcheck",
+            "resource": {
+                "path": "/gohan/v0.1/healthcheck"
+            },
+            "principal": "Nobody"
         }
     ],
     "schemas": [
@@ -865,6 +874,22 @@
                 "type": "object"
             },
             "title": "Gohan Version"
+        },
+        {
+            "description": "The healthcheck metaschema",
+            "id": "healthcheck",
+            "metadata": {
+                "type": "metaschema"
+            },
+            "singular": "healthcheck",
+            "plural": "healthcheck",
+            "prefix": "/gohan/v0.1",
+            "schema": {
+                "properties": {},
+                "type": "object"
+            },
+            "title": "Database status",
+            "type": "abstract"
         }
     ]
 }

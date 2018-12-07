@@ -77,6 +77,7 @@ type Server struct {
 func (server *Server) mapRoutes() {
 	config := util.GetConfig()
 	schemaManager := schema.GetManager()
+	mapHealthcheckRoute(server.martini, server.db, schemaManager)
 	mapSchemaRoute(server.martini, schemaManager)
 	mapVersionRoute(server.martini, schemaManager)
 	MapNamespacesRoutes(server.martini)
@@ -459,6 +460,16 @@ func (server *Server) Stop() {
 	stopCRONProcess(server)
 	manners.Close()
 	server.queue.Stop()
+}
+
+//StopDB stops GohanAPIServer database but not the server itself
+func (server *Server) StopDB() {
+	server.db.Close()
+}
+
+//StopDB stops GohanAPIServer database but not the server itself
+func (server *Server) ReconnectDB() {
+	server.db.Close()
 }
 
 //Queue returns servers build-in queue

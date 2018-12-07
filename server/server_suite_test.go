@@ -44,6 +44,7 @@ var (
 		"extension": true,
 		"namespace": true,
 		"version":   true,
+		"healthcheck": true,
 	}
 )
 
