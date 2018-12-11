@@ -469,7 +469,7 @@ func (server *Server) StopDB() {
 
 //StopDB stops GohanAPIServer database but not the server itself
 func (server *Server) ReconnectDB() {
-	server.db.Close()
+	server.connectDB()
 }
 
 //Queue returns servers build-in queue

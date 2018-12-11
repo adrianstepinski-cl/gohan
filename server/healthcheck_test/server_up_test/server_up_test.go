@@ -1,4 +1,4 @@
-package healthcheck_test
+package server_up_test
 
 import (
 	"errors"
@@ -26,24 +26,6 @@ var _ = Describe("Healthcheck test for active database", func() {
 	})
 })
 
-/*var _ = Describe("Healthcheck test for inactive database", func() {
-	BeforeEach(func() {
-		Server.Stop()
-	})
-
-	AfterEach(func() {
-		Server.Start()
-	})
-
-	It("should return 503 if db isn't working for members", func() {
-		TestURL("GET", HealthcheckURL, MemberTokenID, nil, http.StatusServiceUnavailable)
-	})
-
-	It("should return 503 if db isn't working for non-members", func() {
-		TestURL("GET", HealthcheckURL, "", nil, http.StatusServiceUnavailable)
-	})
-})*/
-
 func StartTestServer(config string) error {
 	var err error
 	Server, err = srv.NewServer(config)
@@ -52,9 +34,14 @@ func StartTestServer(config string) error {
 	}
 
 	go func() {
-		err := Server.Start()
-		if err != nil {
-			panic(err)
+		retry := 3
+		for {
+			err := Server.Start()
+			retry--
+			if err != nil && retry == 0{
+				panic(err)
+			}
+			time.Sleep(50 * time.Millisecond)
 		}
 	}()
 
