@@ -36,6 +36,7 @@ import (
 	"github.com/cloudwan/gohan/db/dbutil"
 	"github.com/cloudwan/gohan/db/initializer"
 	"github.com/cloudwan/gohan/db/migration"
+	mock_db "github.com/cloudwan/gohan/db/mocks"
 	"github.com/cloudwan/gohan/db/transaction"
 	"github.com/cloudwan/gohan/job"
 	l "github.com/cloudwan/gohan/log"
@@ -464,12 +465,16 @@ func (server *Server) Stop() {
 
 //StopDB stops GohanAPIServer database but not the server itself
 func (server *Server) StopDB() {
-	server.db.Close()
+	server.db = mock_db.DBWithoutTransactions{OriginalDatabase: server.db}
+	// server.mapRoutes() - does not work as expected
 }
 
 //StopDB stops GohanAPIServer database but not the server itself
 func (server *Server) ReconnectDB() {
-	server.db.Close()
+	if db, ok := server.db.(mock_db.DBWithoutTransactions); ok {
+		server.db = db.OriginalDatabase
+		// server.mapRoutes() - does not work as expected
+	}
 }
 
 //Queue returns servers build-in queue

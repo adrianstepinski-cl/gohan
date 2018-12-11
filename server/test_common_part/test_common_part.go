@@ -3,16 +3,16 @@ package test_common_part
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/cloudwan/gohan/schema"
-	. "github.com/onsi/gomega"
 	"io"
 	"net/http"
+
+	"github.com/cloudwan/gohan/schema"
+	. "github.com/onsi/gomega"
 )
 
-
 const (
-	BaseURL                   = "http://localhost:19090"
-	HealthcheckURL            = BaseURL + "/gohan/v0.1/healthcheck"
+	BaseURL        = "http://localhost:19090"
+	HealthcheckURL = BaseURL + "/gohan/v0.1/healthcheck"
 )
 
 const (

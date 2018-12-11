@@ -1500,7 +1500,7 @@ var _ = Describe("Server package test", func() {
 		})
 	})
 
-	PDescribe("Healthcheck test for inactive database", func() {
+	Describe("Healthcheck test for inactive database", func() {
 		BeforeEach(func() {
 			server.StopDB()
 		})

@@ -13,14 +13,14 @@ import (
 )
 
 var (
-	testDB    db.DB
+	testDB       db.DB
 	conn, dbType string
-	whitelist = map[string]bool{
-		"schema":    true,
-		"policy":    true,
-		"extension": true,
-		"namespace": true,
-		"version":   true,
+	whitelist    = map[string]bool{
+		"schema":      true,
+		"policy":      true,
+		"extension":   true,
+		"namespace":   true,
+		"version":     true,
 		"healthcheck": true,
 	}
 )
@@ -42,9 +42,9 @@ func SetupDB() {
 	testDB, err = dbutil.ConnectDB(dbType, conn, db.DefaultMaxOpenConn, options.Default())
 	Expect(err).ToNot(HaveOccurred(), "Failed to connect database.")
 	if os.Getenv("MYSQL_TEST") == "true" {
-		err = StartTestServer("/home/adrian/work/src/github.com/cloudwan/gohan/server/server_test_mysql_config.yaml")
+		err = StartTestServer("../server_test_mysql_config.yaml")
 	} else {
-		err = StartTestServer("/home/adrian/work/src/github.com/cloudwan/gohan/server/server_test_config.yaml")
+		err = StartTestServer("../server_test_config.yaml")
 	}
 	Expect(err).ToNot(HaveOccurred(), "Failed to start test server.")
 }
@@ -63,4 +63,3 @@ var _ = Describe("Suit set up and tear down", func() {
 		CleanupDB()
 	})
 })
-

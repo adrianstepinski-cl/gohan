@@ -9,7 +9,6 @@ import (
 	srv "github.com/cloudwan/gohan/server"
 	. "github.com/cloudwan/gohan/server/test_common_part"
 	. "github.com/onsi/ginkgo"
-
 )
 
 var (
@@ -26,13 +25,13 @@ var _ = Describe("Healthcheck test for active database", func() {
 	})
 })
 
-/*var _ = Describe("Healthcheck test for inactive database", func() {
+var _ = Describe("Healthcheck test for inactive database", func() {
 	BeforeEach(func() {
-		Server.Stop()
+		Server.StopDB()
 	})
 
 	AfterEach(func() {
-		Server.Start()
+		Server.ReconnectDB()
 	})
 
 	It("should return 503 if db isn't working for members", func() {
@@ -42,7 +41,7 @@ var _ = Describe("Healthcheck test for active database", func() {
 	It("should return 503 if db isn't working for non-members", func() {
 		TestURL("GET", HealthcheckURL, "", nil, http.StatusServiceUnavailable)
 	})
-})*/
+})
 
 func StartTestServer(config string) error {
 	var err error
