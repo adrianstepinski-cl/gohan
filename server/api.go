@@ -17,6 +17,7 @@ package server
 
 import (
 	"fmt"
+	"github.com/cloudwan/gohan/db/transaction"
 	"net/http"
 	"strconv"
 	"strings"
@@ -647,7 +648,9 @@ func mapHealthcheckRoute(route martini.Router, dataStore db.DB, manager *schema.
 	get := func(w http.ResponseWriter, params martini.Params, auth schema.Authorization) {
 		defer resources.MeasureRequestTime(time.Now(), "get", healthcheckSchema.ID)
 
-		if _, err := dataStore.BeginTx(); err != nil {
+		if err := db.WithinTx(dataStore, func(tx transaction.Transaction) error{
+			return nil
+		}); err != nil {
 			http.Error(w, "", http.StatusServiceUnavailable)
 		} else {
 			http.Error(w, "", http.StatusOK)
